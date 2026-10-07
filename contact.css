@@ -787,3 +787,17 @@ body.cs-dark #logo-white-background {
         background: linear-gradient(to bottom, var(--void) 0%, var(--void) 40%, rgba(9, 20, 52, .35) 50%, rgba(9, 20, 52, .05) 70%, rgba(9, 20, 52, .55) 92%, var(--void) 100%)
     }
 }
+
+/* Services line wraps onto two lines; cards sit a little lower to make room */
+.cs-sub .cs-services {
+    white-space: normal;
+    max-width: calc(600 * var(--h));
+    margin-bottom: calc(8 * var(--h));
+    color: var(--ink)
+}
+
+@media (min-aspect-ratio: 11/10) {
+    .cs-cards {
+        top: calc(230.5 * var(--u) + 306 * var(--h))
+    }
+}
