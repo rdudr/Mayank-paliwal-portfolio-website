@@ -48,7 +48,7 @@
     rs("_ObNMjRq_WM", "FO446", "Why Women Rule Sex Toys: G-Spot, VR Dolls, Men vs Women & Sales — Raj Armani"),
     rs("x3qyh9XpqAk", "FO445", "Gut Health & Sex Connection: Anxiety, Sex Life & Health Risk — Anant Agarwal"),
     { id: "rs-smuggling", client: "raj-shamani", episode: "REEL", title: "Why Smuggling Happens — Utkarsh Dave", role: "Editor", link: "https://www.instagram.com/reel/DP53WW8Er2r/" },
-    { id: "bb-varun", client: "beerbiceps", episode: "PODCAST", title: "Varun Dhawan on The Ranveer Show", role: "Editor", video: "media/projects/beerbiceps/bb-varun.mp4" },
+    { id: "bb-varun", client: "beerbiceps", episode: "TRAILER", title: "Varun Dhawan on The Ranveer Show", role: "Editor", video: "media/projects/beerbiceps/bb-varun.mp4" },
     { id: "bb-bhuvi", client: "beerbiceps", episode: "REEL", title: "Bhuvneshwar Kumar on His Crazy Cricket Debut", role: "Editor", link: "https://www.instagram.com/reel/DXqrk1BDLHF/" },
     { id: "DO8Utz4jD5k", client: "beerbiceps", episode: "REEL", title: "Power of Mahavidya Sadhana — Maa Gyaan Suveera", role: "Editor", link: "https://www.instagram.com/reel/DO8Utz4jD5k/" },
     { id: "DJwtPf2sVbm", client: "beerbiceps", episode: "REEL", title: "Kavya Karnatac Talks About Life in Meghalaya", role: "Editor", link: "https://www.instagram.com/reel/DJwtPf2sVbm/" },
@@ -77,10 +77,17 @@
     });
   });
 
+  // Clips that open a bin's fan first, in this order (by episode); the rest follow.
+  const FEATURED = {
+    "raj-shamani": ["FO523", "FO507", "FO561", "FO551", "FO527", "FO517", "FO537"],
+  };
   const byClient = (c) => {
     const all = PROJECTS.filter((p) => p.client === c);
     const real = all.filter((p) => !p.placeholder);
-    return real.length ? real : all;
+    const list = real.length ? real : all;
+    const order = FEATURED[c] || [];
+    const rank = (p) => (order.indexOf(p.episode) < 0 ? order.length : order.indexOf(p.episode));
+    return list.map((p, i) => [p, i]).sort((a, b) => rank(a[0]) - rank(b[0]) || a[1] - b[1]).map((x) => x[0]);
   };
   const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
   // YouTube's maxres thumbnail doesn't exist for every video — fall back to hq.
