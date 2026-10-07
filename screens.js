@@ -1,6 +1,6 @@
 // Home-page monitors: two simple live screens that keep "working".
-//   edit  — one photo plays big; the playhead runs across a slim timeline.
-//   draw  — the same photo gets graded by a sweeping wipe while one render bar fills.
+//   edit  — an illustrated scene plays big; the playhead runs across a slim timeline.
+//   draw  — the same illustration gets graded by a sweeping wipe while one render bar fills.
 //   Both loop every 12 s: at the end the screen blurs out, then the work restarts.
 // index.js calls MPScreens.attach(mesh, kind, CanvasTexture, originalTexture).
 (function () {
@@ -9,14 +9,6 @@
     dim: "#969ba8", orange: "#ff923e", blue: "#60a5fa", teal: "#2ec4b6", rose: "#e0698e",
     lav: "#a393eb", mango: "#f2a93b", red: "#ff0033", navy: "#091434",
   };
-  const PREVIEWS = [
-    "images/projects/daud.jpg",
-    "images/projects/fo473.jpg",
-  ].map(function (src) {
-    const im = new Image();
-    im.src = src;
-    return im;
-  });
   const ready = (im) => im.complete && im.naturalWidth > 0;
 
   function cover(ctx, im, x, y, w, h) {
@@ -43,10 +35,91 @@
 
   const font = (px, w) => (w || 600) + " " + px + "px Poppins, 'Segoe UI', sans-serif";
 
-  // One photo for the whole loop. Each loop: the work runs start → finish,
+  // Flat illustrated scene (no photos): sky, sun, drifting clouds, layered hills,
+  // a lake, and a tiny filmmaker with a camera on a tripod.
+  function scene(ctx, x, y, w, h, t) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(x, y, w, h);
+    ctx.clip();
+    const sky = ctx.createLinearGradient(0, y, 0, y + h);
+    sky.addColorStop(0, "#3aa6c9");
+    sky.addColorStop(0.65, "#ffd0a1");
+    ctx.fillStyle = sky;
+    ctx.fillRect(x, y, w, h);
+    // sun
+    ctx.fillStyle = "#ffb347";
+    ctx.beginPath();
+    ctx.arc(x + w * 0.72, y + h * 0.38, h * 0.13, 0, Math.PI * 2);
+    ctx.fill();
+    // clouds drift
+    ctx.fillStyle = "rgba(255,255,255,.85)";
+    [[0.1, 0.18, 1], [0.55, 0.12, 0.8], [0.85, 0.24, 0.7]].forEach(function (c) {
+      const cx = x + (((c[0] * w + t * 10 * c[2]) % (w + 80)) - 40), cy = y + c[1] * h, r = h * 0.05 * c[2] + 6;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.arc(cx + r, cy - r * 0.4, r * 1.1, 0, Math.PI * 2);
+      ctx.arc(cx + r * 2.1, cy, r * 0.9, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    // hills (back → front)
+    const hill = function (base, amp, freq, col) {
+      ctx.fillStyle = col;
+      ctx.beginPath();
+      ctx.moveTo(x, y + h);
+      for (let i = 0; i <= 40; i++) {
+        const px = x + (i / 40) * w;
+        ctx.lineTo(px, y + h * base - Math.sin(i * freq) * h * amp - Math.sin(i * freq * 2.3) * h * amp * 0.4);
+      }
+      ctx.lineTo(x + w, y + h);
+      ctx.fill();
+    };
+    hill(0.62, 0.1, 0.35, "#5b6fb3");
+    hill(0.7, 0.07, 0.5, "#3d4f8f");
+    // lake
+    ctx.fillStyle = "#4fb0c6";
+    ctx.fillRect(x, y + h * 0.74, w, h * 0.08);
+    ctx.fillStyle = "rgba(255,255,255,.35)";
+    for (let i = 0; i < 6; i++) ctx.fillRect(x + w * (0.1 + i * 0.15) + Math.sin(t + i) * 4, y + h * 0.77, w * 0.05, 2);
+    // ground
+    ctx.fillStyle = "#2e8f6a";
+    ctx.fillRect(x, y + h * 0.82, w, h * 0.18);
+    // filmmaker + tripod camera
+    const gx = x + w * 0.28, gy = y + h * 0.84, u = h * 0.012;
+    ctx.fillStyle = "#091434";
+    ctx.beginPath(); // tripod legs
+    ctx.moveTo(gx + 26 * u, gy - 20 * u);
+    ctx.lineTo(gx + 18 * u, gy + 6 * u);
+    ctx.lineTo(gx + 20 * u, gy + 6 * u);
+    ctx.lineTo(gx + 27 * u, gy - 18 * u);
+    ctx.lineTo(gx + 34 * u, gy + 6 * u);
+    ctx.lineTo(gx + 36 * u, gy + 6 * u);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = "#ff923e"; // camera body
+    ctx.fillRect(gx + 18 * u, gy - 30 * u, 18 * u, 11 * u);
+    ctx.fillStyle = "#091434";
+    ctx.fillRect(gx + 36 * u, gy - 27 * u, 6 * u, 5 * u);
+    ctx.fillStyle = "#f3c9a0"; // person
+    ctx.beginPath();
+    ctx.arc(gx + 6 * u, gy - 38 * u, 5 * u, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#2a2a33";
+    ctx.fillRect(gx + 1 * u, gy - 33 * u, 10 * u, 18 * u);
+    ctx.fillStyle = "#1d2233";
+    ctx.fillRect(gx + 1 * u, gy - 15 * u, 4 * u, 20 * u);
+    ctx.fillRect(gx + 7 * u, gy - 15 * u, 4 * u, 20 * u);
+    ctx.strokeStyle = "#2a2a33"; // arm to camera
+    ctx.lineWidth = 3 * u;
+    ctx.beginPath();
+    ctx.moveTo(gx + 10 * u, gy - 30 * u);
+    ctx.lineTo(gx + 19 * u, gy - 26 * u);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // One scene for the whole loop. Each loop: the work runs start → finish,
   // the screen blurs out for the last moment, then it restarts.
-  const PHOTO = PREVIEWS[0]; // left monitor (editing)
-  const GRADE_PHOTO = PREVIEWS[1]; // right monitor (colour grade)
   const LOOP = 12;
   const phase = (t) => (t % LOOP) / LOOP;
   const blurAt = (k) => (k > 0.9 ? (k - 0.9) / 0.1 : 0); // 0 → 1 over the last 10%
@@ -90,7 +163,7 @@
     withEndBlur(ctx, k, function () {
       ctx.fillStyle = C.bg;
       ctx.fillRect(0, 0, 512, h);
-      cover(ctx, PHOTO, 0, 0, 512, ty);
+      scene(ctx, 0, 0, 512, ty, t);
       ctx.fillStyle = C.panel;
       ctx.fillRect(0, ty, 512, tlH);
       CLIPS.forEach(function (c) {
@@ -127,7 +200,7 @@
       // graded on the left of the wipe, flat log footage still to the right
       ctx.save();
       ctx.filter = "saturate(0.25) contrast(0.62) brightness(1.18)" + blurCss;
-      cover(ctx, GRADE_PHOTO, 0, 0, 512, vh);
+      scene(ctx, 0, 0, 512, vh, t);
       ctx.restore();
       const wipe = 512 * p;
       ctx.save();
@@ -135,7 +208,7 @@
       ctx.rect(0, 0, wipe, vh);
       ctx.clip();
       ctx.filter = "saturate(1.6) contrast(1.3) brightness(0.95) sepia(0.2)" + blurCss;
-      cover(ctx, GRADE_PHOTO, 0, 0, 512, vh);
+      scene(ctx, 0, 0, 512, vh, t);
       ctx.filter = blurCss || "none";
       ctx.globalCompositeOperation = "soft-light";
       const tone = ctx.createLinearGradient(0, 0, 0, vh);
