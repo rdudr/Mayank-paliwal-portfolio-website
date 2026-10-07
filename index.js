@@ -32705,7 +32705,10 @@ class Jb {
         map: this.resources.items.desktop0,
         fog: !1,
       })),
-      (this.desktop0.material = this.desktop0Layer0Material);
+      (this.desktop0.material = this.desktop0Layer0Material),
+      // Live "working" screen (screens.js): colour grading + render queue.
+      window.MPScreens &&
+        window.MPScreens.attach(this.desktop0, "draw", gx, this.resources.items.desktop0);
   }
   scrollDesktop0() {
     const e = Math.random() * -0.5 + 0.25;
@@ -32724,6 +32727,9 @@ class Jb {
         fog: !1,
       })),
       (this.desktop1.material = this.desktop1PlaneMaterial),
+      // Live "working" screen (screens.js): editing timeline that keeps playing.
+      window.MPScreens &&
+        window.MPScreens.attach(this.desktop1, "edit", gx, this.resources.items.desktop1),
       (this.desktop1.scale.x = 1.01),
       this.setNotification();
   }

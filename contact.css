@@ -688,3 +688,53 @@ body.cs-dark #logo-white-background {
         padding-top: calc(24 * var(--m))
     }
 }
+
+/* Contact row is now the only CTA: move it up into the old button slot. */
+.cs-cards {
+    top: calc(230.5 * var(--u) + 268 * var(--h));
+    flex-wrap: wrap;
+    max-width: calc(560 * var(--h))
+}
+
+.cs-mail {
+    background: #5b7cfa
+}
+
+@media (max-aspect-ratio: 11/10) {
+    .cs-cards {
+        top: auto;
+        max-width: none;
+        flex-wrap: nowrap;
+        margin-top: calc(26 * var(--m))
+    }
+}
+
+/* Four contact cards: tidy 2 × 2 grid on desktop */
+@media (min-aspect-ratio: 11/10) {
+    .cs-cards {
+        display: grid;
+        grid-template-columns: repeat(2, calc(322 * var(--h)));
+        max-width: none
+    }
+
+    .cs-card {
+        min-width: 0
+    }
+
+    .cs-card-text {
+        min-width: 0
+    }
+
+    .cs-card-text strong {
+        overflow: hidden;
+        text-overflow: ellipsis
+    }
+}
+
+/* Email card takes the full row so the whole address shows */
+@media (min-aspect-ratio: 11/10) {
+    .cs-card:has(.cs-mail) {
+        grid-column: 1 / -1;
+        order: 4
+    }
+}

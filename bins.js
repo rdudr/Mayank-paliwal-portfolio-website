@@ -17,24 +17,45 @@
   };
 
   const PROJECTS = [
-    rs("9QXCkMTbrSk", "FO473", "President of France on Trump, India, Modi, Tech & Future — Emmanuel Macron"),
+    rs("pbLFmU1p-7A", "FO566", "How Much Does It Cost To Own A Private Jet? Business Explained — Abhinav Tripathi"),
+    rs("WnYgRL456ps", "FO563", "How To Break Anyone & Make Them Reveal Their Secrets — Evy Poumpouras"),
     rs("46P1rL0rzPE", "FO561", "Smriti Mandhana on Controlling Emotions, Handling Pressure & Failures"),
     rs("GKn7ywUpB6c", "FO555", "Why Is Watchmaking So Difficult? The Business Behind Luxury — Gaurav Mehta"),
+    rs("JWPrgCbUwC8", "FO553", "Sanjiv Goenka On Billionaires, The Next Big Opportunities & Building Wealth"),
     rs("9CADz6sP40I", "FO551", "The Most Expensive Cars Compete on Emotion, Not Engineering — Frank Walliser"),
+    rs("zN_lhtJFsgg", "FO550", "How Osama Bin Laden Built a Terror Network & 9/11 — Aimen Dean"),
+    rs("YMTJw1G3yOM", "FO549", "Habits That Make People Dislike You! The 4 Boxes You're Put In — Mark Bowden"),
+    rs("h-0u0ui8ESQ", "FO548", "9 Titles in One Year: How Anahat Singh Became World Champion at 18"),
+    rs("ywd-Ve8a8Tc", "FO547", "World Order Is a Lie: The Next 50 Years Will Change Everything — Prof. Jiang"),
     rs("zSkxqtTbEGU", "FO545", "Why America Is No Longer the World’s Leader — Ian Bremmer"),
     rs("PXMyK7JxGOk", "FO537", "Billion-Dollar Founder: Why Success in India Is So Hard — Kiran Mazumdar-Shaw"),
+    rs("a3UVcK612iU", "FO536", "Astronaut Shubhanshu Shukla On Space, ISS, Zero Gravity & Human Body"),
     rs("o-h3STaeFro", "FO529", "Why Banks Are Dying: Bitcoin, Crypto & De-dollarisation — Richard Teng"),
     rs("0TBjnUfulGw", "FO527", "Inside India’s Supreme Court: Money, Justice & Free Speech — DY Chandrachud"),
     rs("NGV5S9j_oL4", "FO523", "Russian Spy: Mind Control, Seduction & Manipulation — Aliia Roza"),
+    rs("qt2XslRMOto", "FO521", "Nobel Laureate Explains India’s Economy, Poverty, GDP & AI — Abhijit Banerjee"),
     rs("lacFcgcHx6I", "FO518", "Top Brain Scientist: Billionaire Brain, Anxiety & Addictions — Vidita Vaidya"),
     rs("sGpc8-f2e8U", "FO517", "Imtiaz Ali on Love, Heartbreak, Rockstar, Tamasha & Bollywood Filmmaking"),
+    rs("sdMHVIcPGwg", "FO516", "Liquor License, Alcohol Tax & Liquor Business Secrets in India — Mokksh Sani"),
+    rs("kKNoBH0iE1k", "FO514", "How To Grow Your Salary To ₹1 Crore Using AI — Vaibhav Sisinty"),
     rs("JCOb1w_LTOg", "FO512", "Champion Mindset: High Performance, Discipline & Obsession"),
     rs("3otrmTL24OA", "FO507", "Kiara Advani on Marriage, Motherhood, Relationships & Bollywood"),
     rs("23dbj3silMU", "FO504", "Lakshya Sen on Champion Mindset, Olympic Heartbreak & Comebacks"),
     rs("CdsneNlNpXw", "FO502", "The Hidden Danger in Rice and Wheat: Focus Issues, Iron Loss & Anemia"),
     rs("rb9536WrfDA", "FO501", "Indian Diet Problem: Low Protein, High Calories & Muscle Loss — Prashant Desai"),
+    rs("x5lkswNc1Wc", "FO492", "Janhvi Kapoor on Addictions, Bollywood, Childhood, Parents & Relationships"),
+    rs("9QXCkMTbrSk", "FO473", "President of France on Trump, India, Modi, Tech & Future — Emmanuel Macron"),
+    rs("1Iz-wq5W4WE", "FO466", "Ashish Chanchlani on Career, Comeback, Loneliness, Trolls & Ekaki"),
+    rs("_ObNMjRq_WM", "FO446", "Why Women Rule Sex Toys: G-Spot, VR Dolls, Men vs Women & Sales — Raj Armani"),
+    rs("x3qyh9XpqAk", "FO445", "Gut Health & Sex Connection: Anxiety, Sex Life & Health Risk — Anant Agarwal"),
     { id: "rs-smuggling", client: "raj-shamani", episode: "REEL", title: "Why Smuggling Happens — Utkarsh Dave", role: "Editor", link: "https://www.instagram.com/reel/DP53WW8Er2r/" },
     { id: "bb-bhuvi", client: "beerbiceps", episode: "REEL", title: "Bhuvneshwar Kumar on His Crazy Cricket Debut", role: "Editor", link: "https://www.instagram.com/reel/DXqrk1BDLHF/" },
+    { id: "DO8Utz4jD5k", client: "beerbiceps", episode: "REEL", title: "Power of Mahavidya Sadhana — Maa Gyaan Suveera", role: "Editor", link: "https://www.instagram.com/reel/DO8Utz4jD5k/" },
+    { id: "DJwtPf2sVbm", client: "beerbiceps", episode: "REEL", title: "Kavya Karnatac Talks About Life in Meghalaya", role: "Editor", link: "https://www.instagram.com/reel/DJwtPf2sVbm/" },
+    { id: "DJwtvHos9Mt", client: "beerbiceps", episode: "REEL", title: "Kavya Karnatac Talks About the Reality of Jharkhand", role: "Editor", link: "https://www.instagram.com/reel/DJwtvHos9Mt/" },
+    { id: "DJEA7Dlvt3y", client: "beerbiceps", episode: "REEL", title: "Prathamesh Sinha Talks About the Mahabharata", role: "Editor", link: "https://www.instagram.com/reel/DJEA7Dlvt3y/" },
+    { id: "DJEAck4PIAk", client: "beerbiceps", episode: "REEL", title: "The Best Feeling Ever", role: "Editor", link: "https://www.instagram.com/reel/DJEAck4PIAk/" },
+    { id: "DIb5QDwSw-n", client: "beerbiceps", episode: "REEL", title: "Bhuvi Talks About Lionel Messi", role: "Editor", link: "https://www.instagram.com/reel/DIb5QDwSw-n/" },
     daud(1, "Sach ka Samna"),
     daud(2, "Shadyantra"),
     daud(3, "Duvidha"),
@@ -42,7 +63,11 @@
     daud(5, "Khulasa"),
     daud(6, "Finally Actress Mil Gayi"),
     { id: "fl-01", client: "freelance", title: "Freelance edit (link coming soon)", role: "Editor", placeholder: true },
-  ].map(function (p) {
+  ].filter(function (p, i, all) {
+    // Same video added twice (e.g. a link pasted with a different ?si= / ?stkn= tracker) shows once.
+    const key = (q) => (q.link && (q.link.match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/) || q.link.match(/instagram\.com\/(?:reel|p)\/([\w-]+)/) || [])[1]) || q.video || q.id;
+    return all.findIndex((q) => key(q) === key(p)) === i;
+  }).map(function (p) {
     const yt = p.link && (p.link.match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/) || [])[1];
     const ig = p.link && !p.video && (p.link.match(/instagram\.com\/(?:reel|p)\/([\w-]+)/) || [])[1];
     return Object.assign({}, p, {
