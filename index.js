@@ -33347,6 +33347,9 @@ class hw {
   }
   setModel() {
     (this.model = this.resources.items.contactSceneModel.scene),
+      // The last page has its own photo background now: keep the 3D boxes scene hidden
+      // so it never peeks through between the projects page and the contact page.
+      (this.model.visible = !1),
       this.scene.add(this.model);
   }
   setMaterial() {
@@ -33468,6 +33471,8 @@ class pw {
       this.setMaterialsToHide();
   }
   playIdle() {
+    // Character no longer goes to the (hidden) boxes scene.
+    return;
     this.played ||
       ((this.byeActive = !0),
       (this.character.body.model.position.y =
@@ -33487,6 +33492,7 @@ class pw {
         this.character.animations.play("standingIdle", 0));
   }
   playTransition() {
+    return; // see playIdle
     if (this.played) return;
     this.played = !0;
     this.startedTransition = !0;
@@ -37864,12 +37870,12 @@ class lM {
 
 }
 const cM = [
-  { name: "Long-form editing", width: "95%" },
-  { name: "Storytelling & pacing", width: "92%" },
-  { name: "Short-form / reels", width: "88%" },
-  { name: "Colour grading", width: "75%" },
-  { name: "Motion graphics", width: "70%" },
-  { name: "Sound design", width: "78%" },
+  { name: "Long-Form Editing", width: "95%" },
+  { name: "Storytelling & Pacing", width: "92%" },
+  { name: "Short-Form / Reels", width: "88%" },
+  { name: "Colour Grading", width: "75%" },
+  { name: "Motion Graphics", width: "70%" },
+  { name: "Sound Design", width: "78%" },
 ];
 class hM {
   constructor() {

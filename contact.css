@@ -801,3 +801,15 @@ body.cs-dark #logo-white-background {
         top: calc(230.5 * var(--u) + 306 * var(--h))
     }
 }
+
+/* Phones: services list and the "Tell me about…" line each on their own lines */
+@media (max-aspect-ratio: 11/10) {
+    .cs-sub span {
+        display: block
+    }
+
+    .cs-sub .cs-services {
+        max-width: none;
+        margin-bottom: calc(10 * var(--m))
+    }
+}
