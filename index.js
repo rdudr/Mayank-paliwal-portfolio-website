@@ -37870,12 +37870,12 @@ class lM {
 
 }
 const cM = [
-  { name: "Long-Form Editing", width: "95%" },
-  { name: "Storytelling & Pacing", width: "92%" },
-  { name: "Short-Form / Reels", width: "88%" },
-  { name: "Colour Grading", width: "75%" },
-  { name: "Motion Graphics", width: "70%" },
-  { name: "Sound Design", width: "78%" },
+  { name: "Long-Form Editing", width: "90%" },
+  { name: "Storytelling & Pacing", width: "87%" },
+  { name: "Short-Form / Reels", width: "80%" },
+  { name: "Colour Grading", width: "85%" },
+  { name: "Motion Graphics", width: "90%" },
+  { name: "Sound Design", width: "95%" },
 ];
 class hM {
   constructor() {
