@@ -49,7 +49,7 @@
 
 .bins-tabs {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
     padding: 20px
 }
@@ -286,7 +286,7 @@
 
 @media (max-width: 640px) {
     .bins-tabs {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 8px;
         padding: 12px
     }
@@ -484,4 +484,10 @@
     color: #fff;
     padding: 0 24px;
     width: auto !important
+}
+
+/* Long bin names (DAUD_SHORT_FILM) wrap instead of overflowing on phones */
+.bins-tab-name {
+    text-align: center;
+    overflow-wrap: anywhere
 }

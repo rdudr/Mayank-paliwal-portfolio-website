@@ -4,16 +4,15 @@
   const CLIENTS = {
     "raj-shamani": { label: "Raj Shamani", bin: "RAJ_SHAMANI", color: "#f2a93b" },
     beerbiceps: { label: "BeerBiceps", bin: "BEERBICEPS", color: "#e0698e" },
-    daud: { label: "Daud", bin: "DAUD_BTS", color: "#2ec4b6" },
-    freelance: { label: "Freelance", bin: "FREELANCE", color: "#a393eb" },
+    daud: { label: "Daud Short Film", bin: "DAUD_SHORT_FILM", color: "#2ec4b6" },
   };
-  const BINS = ["daud", "raj-shamani", "beerbiceps", "freelance"];
+  const BINS = ["daud", "raj-shamani", "beerbiceps"];
   const FAN_MAX = 7;
 
   const rs = (id, episode, title) => ({ id, client: "raj-shamani", episode, title, role: "Editor", link: "https://youtu.be/" + id });
   const daud = (n, title) => {
     const id = "ep" + String(n).padStart(2, "0");
-    return { id, client: "daud", episode: "EP " + String(n).padStart(2, "0"), title, role: "Editor", video: "media/projects/daud/" + id + ".mp4", link: "https://www.instagram.com/arpitjainn__/" };
+    return { id, client: "daud", episode: "EP " + String(n).padStart(2, "0"), title, role: "Actor and Video Editor", video: "media/projects/daud/" + id + ".mp4", link: "https://www.instagram.com/arpitjainn__/" };
   };
 
   const PROJECTS = [
@@ -62,7 +61,6 @@
     daud(4, "Grahon Ka Khel"),
     daud(5, "Khulasa"),
     daud(6, "Finally Actress Mil Gayi"),
-    { id: "fl-01", client: "freelance", title: "Freelance edit (link coming soon)", role: "Editor", placeholder: true },
   ].filter(function (p, i, all) {
     // Same video added twice (e.g. a link pasted with a different ?si= / ?stkn= tracker) shows once.
     const key = (q) => (q.link && (q.link.match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/) || q.link.match(/instagram\.com\/(?:reel|p)\/([\w-]+)/) || [])[1]) || q.video || q.id;
