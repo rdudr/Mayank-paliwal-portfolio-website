@@ -738,3 +738,18 @@ body.cs-dark #logo-white-background {
         order: 4
     }
 }
+
+/* Background: aerial freight-train video, full cover, centred, not animated or zoomed */
+.cs-video,
+.cs-stage .cs-video {
+    inset: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    transform: none;
+    object-fit: cover;
+    object-position: center;
+    background: #0a0b0c
+}
