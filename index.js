@@ -33420,6 +33420,7 @@ class dw {
         opacity: 0,
       })),
       (this.sprite = new _i(this.material)),
+      (this.sprite.visible = !1),
       this.contactScene.model.add(this.sprite);
   }
 }
@@ -33462,7 +33463,8 @@ class pw {
   }
   playIdle() {
     this.played ||
-      ((this.character.body.model.position.y =
+      ((this.byeActive = !0),
+      (this.character.body.model.position.y =
         this.experience.world.contact.scene.model.position.y +
         this.parameters[
           this.sizes.portrait ? "characterPortraitY" : "characterLandscapeY"
@@ -33479,76 +33481,42 @@ class pw {
         this.character.animations.play("standingIdle", 0));
   }
   playTransition() {
-    this.played ||
-      ((this.played = !0),
-      (this.timeline = P.timeline()),
-      P.delayedCall(0.2, () => {
-        (this.character.face.material.map =
-          this.character.face.textures.scared),
-          P.delayedCall(0.35, () => {
-            (this.character.face.faceTransitions.current = null),
-              this.character.face.updateFace("contact");
-          });
-      }),
-      P.delayedCall(0.15, () => {
-        this.character.animations.actions.current._clip.name ===
-          "standing-idle" &&
-          (this.sounds.play("gasp"),
-          this.character.animations.play("contact", 0.1));
-      }),
-      (this.transtionDelay = P.delayedCall(0.2, () => {
-        (this.startedTransition = !0),
-          this.timeline.to(
-            this.david.material,
-            {
-              opacity: 1,
-              duration: this.parameters.transitionDuration,
-              ease: wi.easeIn,
-            },
-            0
-          ),
-          (this.character.body.materials.bakedMaterial.transparent = !0),
-          (this.character.body.materials.bakedMaterial.needsUpdate = !0),
-          (this.character.face.model.renderOrder = 1),
-          this.materialsToHide.forEach((e) => {
-            this.timeline.to(
-              e,
-              {
-                opacity: 0,
-                duration: this.parameters.transitionDuration,
-                ease: wi.easeIn,
-              },
-              0
-            );
-          });
-      })));
+    if (this.played) return;
+    this.played = !0;
+    this.startedTransition = !0;
+    this.byeActive = !0;
+    // Say bye: smile and wave (instead of the old flat photo sprite).
+    this.character.face.material.map =
+      this.experience.resources.items.characterSmile2Face;
+    this.character.animations.actions.idle.allowedOutsideLanding = !0;
+    this.character.animations.play("idle", 0.3);
+    // Sit on the small box, facing the camera.
+    const body = this.character.body.model;
+    this.byeOriginal = { ry: body.rotation.y, x: body.position.x, z: body.position.z };
+    body.rotation.y = 1.57;
+    body.position.x = this.sizes.portrait ? 0.1 : -0.3;
+    body.position.z = this.sizes.portrait ? 0 : -0.1;
+    body.position.y += this.sizes.portrait ? 0 : 0.55;
+    this.character.animations.bye = { start: performance.now() * 0.001 };
+    this.sounds.play("gasp");
   }
   resetCharacter() {
-    (this.character.body.materials.bakedMaterial.transparent ||
-      this.materialsToHide[0].opacity != 1 ||
-      !this.startedTransition) &&
-      (this.experience.ui.landingPage.visible ||
-        this.experience.ui.about.animations.resetCharacterToPosition(),
-      this.character.body.model.scale.set(1, 1, 1),
-      (this.character.body.materials.bakedMaterial.transparent = !1),
-      (this.character.body.materials.bakedMaterial.needsUpdate = !0),
-      (this.character.face.model.renderOrder = 0),
-      this.materialsToHide.forEach((e) => {
-        e.opacity = 1;
-      }),
-      this.timeline && this.timeline.kill(),
-      this.transtionDelay && this.transtionDelay.kill(),
-      this.david.material.opacity != 1 &&
-        this.played &&
-        P.to(
-          this.david.material,
-          {
-            opacity: 1,
-            duration: this.parameters.transitionDuration,
-            ease: wi.easeIn,
-          },
-          0
-        ));
+    if (!this.byeActive && this.startedTransition) return;
+    this.byeActive = !1;
+    this.played = !1;
+    this.startedTransition = !1;
+    this.experience.ui.landingPage.visible ||
+      this.experience.ui.about.animations.resetCharacterToPosition();
+    this.character.body.model.scale.set(1, 1, 1);
+    this.character.face.model.renderOrder = 0;
+    this.character.animations.bye = null;
+    this.character.animations.actions.idle.allowedOutsideLanding = !1;
+    if (this.byeOriginal) {
+      this.character.body.model.rotation.y = this.byeOriginal.ry;
+      this.character.body.model.position.z = this.byeOriginal.z;
+      this.character.body.model.position.x = this.byeOriginal.x;
+      this.byeOriginal = null;
+    }
   }
   setMaterialsToHide() {
     this.materialsToHide = [
@@ -34068,6 +34036,37 @@ class yw {
     this.mixer &&
       this.time.delta < 50 &&
       this.mixer.update(this.time.delta * 0.001);
+    if (this.bye) try { this.applyBye(); } catch (e) { this.bye = null; }
+  }
+  // "Bye" wave: aims the right arm in world space (upper arm up and out to his side,
+  // forearm up and swinging side to side), on top of whatever pose is playing.
+  applyBye() {
+    const t = performance.now() * 0.001,
+      raise = Math.min(1, (t - this.bye.start) * 2),
+      arm = this.model.getObjectByName("rightarmBone"),
+      fore = this.model.getObjectByName("rightForearmBone"),
+      spine = this.model.getObjectByName("spine2Bone");
+    if (!arm || !fore || !spine) return;
+    this.model.updateMatrixWorld(!0);
+    const up = new C(0, 1, 0),
+      side = arm.getWorldPosition(new C()).sub(spine.getWorldPosition(new C()));
+    (side.y = 0), side.normalize();
+    const aim = (bone, dir) => {
+      const world = bone.getWorldQuaternion(new Ut()),
+        axis = new C(0, 1, 0).applyQuaternion(world),
+        target = world.premultiply(new Ut().setFromUnitVectors(axis, dir)),
+        local = bone.parent.getWorldQuaternion(new Ut()).invert().multiply(target);
+      bone.quaternion.slerp(local, raise), bone.updateMatrixWorld(!0);
+    };
+    // Toward the camera, flattened, so the wave reads "in front of the screen".
+    const toCam = this.experience.camera.instance.position.clone().sub(arm.getWorldPosition(new C()));
+    (toCam.y = 0), toCam.normalize();
+    const cfg = {};
+    aim(arm, side.clone().multiplyScalar(cfg.s ?? 0.7).add(up.clone().multiplyScalar(cfg.u ?? 0.35)).add(toCam.clone().multiplyScalar(cfg.f ?? 0.35)).normalize());
+    const a = 0.4 + Math.sin(t * 7) * 0.3;
+    aim(fore, up.clone().multiplyScalar(Math.cos(a)).add(side.clone().multiplyScalar(Math.sin(a))).add(toCam.clone().multiplyScalar(cfg.ff ?? 0.15)).normalize());
+    // Twist the forearm about its own length so the palm faces the camera.
+    fore.quaternion.multiply(new Ut().setFromAxisAngle({ x: 0, y: 1, z: 0 }, (cfg.tw ?? 0) * raise));
   }
 }
 class xw {
@@ -36872,12 +36871,12 @@ const tM = [
   {
     name: "desktop0",
     type: "texture",
-    path: "models/room/desktops/0.png",
+    path: "models/room/desktops/0.png?v=2",
   },
   {
     name: "desktop1",
     type: "texture",
-    path: "models/room/desktops/1.png",
+    path: "models/room/desktops/1.png?v=2",
   },
   {
     name: "newMessageSprite",
@@ -37616,73 +37615,62 @@ class rM {
 const oM = [
     {
       id: 0,
-      name: "the iqic",
-      description: "Delivered a professional freelance project for a quality inspection company, creating a comprehensive business website",
-      image: "images/projects/theiqic.jpeg",
-      tags: ["javascript", "html", "css", "freelance"],
-      liveview: "https://theiqic.com/",
-      // github: "https://github.com/satvik9373/coffee-website-.git",
-      alt: "Coffee Shop Website",
+      name: "Raj Shamani — Figuring Out",
+      description: "Long-form podcast editor since Sep 2025 — 16 episodes so far: Emmanuel Macron (FO473), Smriti Mandhana, DY Chandrachud, Kiara Advani, Lakshya Sen, Imtiaz Ali, Kiran Mazumdar-Shaw & more.",
+      image: "https://i.ytimg.com/vi/9QXCkMTbrSk/hqdefault.jpg",
+      tags: ["editing", "podcast", "storytelling"],
+      liveview: "https://www.youtube.com/rajshamani",
+      alt: "Raj Shamani Figuring Out podcast editing",
     },
     {
       id: 1,
-      name: "venchers campaign",
-      description: "a block-based photo sharing system inspired by the historic Million Dollar Homepage concept",
-      image: "images/projects/krushigram.png",
-      tags: ["react", "express", "multer", "googleAuth","Cloudinery"],
-      liveview: "https://venchers-campaign.vercel.app/",
-      alt: "venchers campaign",
+      name: "Raj Shamani — Reels",
+      description: "Short-form cut: \"Why Smuggling Happens\" with Utkarsh Dave, made for the Figuring Out reels page.",
+      image: "images/projects/raj-shamani.jpg",
+      tags: ["reels", "editing", "motion"],
+      liveview: "https://www.instagram.com/reel/DP53WW8Er2r/",
+      alt: "Raj Shamani Why Smuggling Happens reel",
     },
     {
       id: 2,
-      name: "vapor ui",
-      description: "UI component library featuring 20+ reusable components, text animations, background animations, loading page elements, and interactive UI element ",
-      image: "images/projects/vaporui.jpeg",
-      tags: ["javascript", "react", "ui","framer"],
-      liveview: "https://vapor-ui.vercel.app/",
-      // github: "https://github.com/satvik9373/yoga-class.git",
-      alt: "Fitness Institute",
+      name: "BeerBiceps",
+      description: "Video editor, Feb 2025 – May 2025. Reel: Bhuvneshwar Kumar on his crazy cricket debut.",
+      image: "images/projects/beerbiceps.jpg",
+      tags: ["editing", "reels", "podcast"],
+      liveview: "https://www.instagram.com/reel/DXqrk1BDLHF/",
+      alt: "BeerBiceps Bhuvneshwar Kumar reel",
     },
     {
       id: 3,
-      name: "Quick Labs",
-      description: "Quick labs is an LMS developed for teaching assistants at my university to provide lab solutions, manage materials, and support students.",
-      image: "images/projects/studybuddy.jpeg",
-      tags: ["javascript", "react", "mongodb", ""],
-      liveview: "http://quicklabs.fun/",
-      // github: "https://github.com/satvik9373/Think-Beyond-Marketing",
-      alt: "Digital Marketing Agency",
+      name: "Daud — Behind the Scenes",
+      description: "6-episode series on the making of the short film Daud (2024): 500K+ Instagram views and 2,500 new followers in 3 days.",
+      image: "images/projects/daud.jpg",
+      tags: ["editing", "storytelling", "motion"],
+      liveview: "https://www.instagram.com/arpitjainn__/",
+      alt: "Daud behind the scenes series",
     },
     {
       id: 4,
-      name: "Open Talk",
-      description: "Open Talk is a platform where people can share their achievements and hacks, allowing others to like or dislike them without needing an account.",
-      image: "images/projects/opentalk.jpeg",
-      tags: ["react", "mongodb", "express"],
-      liveview: "https://opentalk1.netlify.app/",
-      // github: "https://github.com/satvik9373/lms-websitee",
-      alt: "Affiliate Marketing and earning Website",
+      name: "Freelance",
+      description: "2021 – Jan 2025. Independent editing, colour and sound for creators and brands — including the Daud series.",
+      image: "media/projects/freelance/fl-01.jpg",
+      tags: ["editing", "storytelling", "motion"],
+      liveview: "https://www.instagram.com/mayankpaliwaal",
+      alt: "Freelance video editing",
     },
   ],
   aM = {
+    editing: '<div class="work-item-tag" style="background: #FF923E;">Video Editing</div>',
+    podcast: '<div class="work-item-tag" style="background: #21BAEB;">Podcast</div>',
+    reels: '<div class="work-item-tag" style="background: #CA49F8;">Reels</div>',
+    storytelling: '<div class="work-item-tag" style="background: #4fe461;">Storytelling</div>',
+    motion: '<div class="work-item-tag" style="background: #FFB800;">Motion Graphics</div>',
     html: '<div class="work-item-tag" style="background: white; border: 1px solid #7C8594; color: #7C8594">HTML</div>',
     css: '<div class="work-item-tag" style="background: white; border: 1px solid #7C8594; color: #7C8594">CSS</div>',
-    javascript:
-      '<div class="work-item-tag" style="background: #FFB800;">JavaScript</div>',
-    react:
-      '<div class="work-item-tag" style="background: #21BAEB;">React js</div>',
-    mongodb:'<div class="work-item-tag" style="background: #4fe461;">MongoDB</div>',
-    googleAuth:'<div class="work-item-tag" style="background: #4fe461;">Google Auth</div>',
-    express:
-      '<div class="work-item-tag" style="background: #333;">Express</div>',
-    multer:
-      '<div class="work-item-tag" style="background:rgb(187, 93, 93);">Multer</div>',
-      Cloudinery: '<div class="work-item-tag" style="background:rgb(73, 143, 248);">Cloudinery</div>',
-      freelance: '<div class="work-item-tag" style="background:rgb(73, 143, 248);">Freelancs</div>',
+    javascript: '<div class="work-item-tag" style="background: #FFB800;">JavaScript</div>',
+    react: '<div class="work-item-tag" style="background: #21BAEB;">React js</div>',
+    freelance: '<div class="work-item-tag" style="background:rgb(73, 143, 248);">Freelance</div>',
     ui: '<div class="work-item-tag" style="background: #CA49F8;">UI Design</div>',
-    tailwind: '<div class="work-item-tag" style="background:rgb(234, 248, 73);">Tailwind</div>',
-    game: '<div class="work-item-tag" style="background: #e86ef0;">Game</div>',
-    framer: '<div class="work-item-tag" style="background: #e86ef0;">Framer</div>',
   };
 class lM {
   constructor() {
@@ -37779,7 +37767,7 @@ class lM {
         // Render only the "Live View" button if a live view link is present
         t = `
             <div id="work-item-orange-button-${e.id}" class="work-item-orange-button small-button center orange-hover" style="width: 100%; margin: 0;">
-                Live View
+                Watch
             </div>
         `;
     } else if (e.twitter) {
@@ -37870,26 +37858,12 @@ class lM {
 
 }
 const cM = [
-  {
-    name: "web development",
-    width: "90%",
-  },
-  {
-    name: "app devlopment",
-    width: "55%",
-  },
-  {
-    name: "graphic design",
-    width: "90%",
-  },
-  {
-    name: "frontend",
-    width: "80%",
-  },
-  {
-    name: "backend",
-    width: "75%",
-  },
+  { name: "Long-form editing", width: "95%" },
+  { name: "Storytelling & pacing", width: "92%" },
+  { name: "Short-form / reels", width: "88%" },
+  { name: "Colour grading", width: "75%" },
+  { name: "Motion graphics", width: "70%" },
+  { name: "Sound design", width: "78%" },
 ];
 class hM {
   constructor() {
@@ -38605,12 +38579,11 @@ class Ln {
       this.scroll.addEvent(e, this.direction, this.f, this.repeats);
   }
   getY(e) {
-    let t = 0;
-    t += e.offsetTop;
-    let n = e.offsetParent.id,
+    if (!e || !e.offsetParent) return 0;
+    let t = e.offsetTop,
       i = e;
-    for (; n != "scroll-container"; )
-      (i = i.offsetParent), (n = i.offsetParent.id), (t += i.offsetTop);
+    for (; i.offsetParent && i.offsetParent.id != "scroll-container"; )
+      (i = i.offsetParent), (t += i.offsetTop);
     return t - e.scrollTop + e.clientTop - window.innerHeight;
   }
 }

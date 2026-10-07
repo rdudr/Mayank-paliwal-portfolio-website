@@ -228,7 +228,7 @@
 }
 
 #landing-content-svg {
-    width: 550px;
+    width: 616px;
     max-width: 45%;
     max-height: 53%;
     position: relative
@@ -246,6 +246,18 @@
     font-size: 17px;
     fill: #7c8594;
     transform-origin: left
+}
+
+.landing-oneliner {
+    font-size: 22px;
+    font-weight: 500;
+    fill: #7c8594
+}
+
+.landing-roles {
+    font-size: 16px;
+    font-weight: 600;
+    fill: #FF923E
 }
 
 @media (max-aspect-ratio: 12/10) {
@@ -354,7 +366,7 @@
 .about-skill-container {
     height: 100%;
     box-sizing: border-box;
-    padding: 6px 20px;
+    padding: 4px 20px;
     display: flex;
     justify-content: center;
     align-items: center
@@ -1266,4 +1278,79 @@ section {
 
 .social-icon:hover {
     transform: scale(1.1); /* Optional: slight scale up on hover */
+}
+
+
+/* About: TOOLS + EXPERIENCE panels (content from the Mayank Paliwal site) */
+.about-tools {
+    list-style: none;
+    margin: 0;
+    padding: 6px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px
+}
+
+.about-tools li {
+    border: 1px solid rgba(52, 191, 255, .4);
+    background: #2d88dd22;
+    color: #fff;
+    padding: 6px 14px;
+    font-size: 15px
+}
+
+.about-exp {
+    list-style: none;
+    margin: 0;
+    padding: 0
+}
+
+.about-exp-item {
+    display: flex;
+    gap: 14px;
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(52, 191, 255, .15)
+}
+
+.about-exp-item:last-child {
+    border-bottom: 0
+}
+
+.about-exp-sub {
+    padding-left: 44px
+}
+
+.about-exp-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 6px
+}
+
+.about-exp-item p {
+    margin: 0
+}
+
+.about-exp-title {
+    color: #fff;
+    font-size: 18px
+}
+
+.about-exp-period {
+    color: #34bfff;
+    font-size: 13px;
+    margin-left: 6px
+}
+
+.about-exp-role {
+    color: rgba(52, 191, 255, .8);
+    font-size: 13px
+}
+
+.about-exp-summary {
+    color: rgba(191, 232, 255, .9);
+    font-size: 13px;
+    line-height: 1.45;
+    margin-top: 4px !important
 }

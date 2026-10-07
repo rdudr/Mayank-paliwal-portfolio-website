@@ -1,67 +1,48 @@
 const oM = [
     {
       id: 0,
-      name: "Project Hub",
-      description: "Coffee Shop Website",
-      image: "images/projects/projecthub.png",
-      tags: ["javascript", "html", "css", "ui"],
-      liveview: "https://projecthubb.vercel.app/",
-      alt: "Coffee Shop Website",
+      name: "Raj Shamani — Figuring Out",
+      description: "Long-form podcast editor since Sep 2025 — 16 episodes so far: Emmanuel Macron (FO473), Smriti Mandhana, DY Chandrachud, Kiara Advani, Lakshya Sen, Imtiaz Ali, Kiran Mazumdar-Shaw & more.",
+      image: "https://i.ytimg.com/vi/9QXCkMTbrSk/hqdefault.jpg",
+      tags: ["editing", "podcast", "storytelling"],
+      liveview: "https://www.youtube.com/rajshamani",
+      alt: "Raj Shamani Figuring Out podcast editing",
     },
     {
       id: 1,
-      name: "krushigram",
-      description:
-        "Krushigram is an e-commerce platform for farmers, developed during a hackathon at DA-IICT.It aims to empower farmers through fair trade.",
-      image: "images/projects/krushigram.png",
-      tags: ["javascript", "html", "css", "ui"],
-      liveview: "https://krushigram.vercel.app/",
-      alt: "Coffee Shop Website",
+      name: "Raj Shamani — Reels",
+      description: "Short-form cut: \"Why Smuggling Happens\" with Utkarsh Dave, made for the Figuring Out reels page.",
+      image: "images/projects/raj-shamani.jpg",
+      tags: ["reels", "editing", "motion"],
+      liveview: "https://www.instagram.com/reel/DP53WW8Er2r/",
+      alt: "Raj Shamani Why Smuggling Happens reel",
     },
     {
       id: 2,
-      name: "Study Buddy",
-      description: "LMS for teaching assistant",
-      image: "images/projects/studybuddy.jpeg",
-      tags: ["javascript", "react", "mongodb", "express"],
-      liveview: "https://studybuddyy.vercel.app/",
-      alt: "Digital Marketing Agency",
+      name: "BeerBiceps",
+      description: "Video editor, Feb 2025 – May 2025. Reel: Bhuvneshwar Kumar on his crazy cricket debut.",
+      image: "images/projects/beerbiceps.jpg",
+      tags: ["editing", "reels", "podcast"],
+      liveview: "https://www.instagram.com/reel/DXqrk1BDLHF/",
+      alt: "BeerBiceps Bhuvneshwar Kumar reel",
     },
     {
       id: 3,
-      name: "Open Talk",
-      description: "Affiliate Marketing and earning Website",
-      image: "images/projects/opentalk.jpeg",
-      tags: ["react", "mongodb", "express"],
-      liveview: "https://opentalk1.netlify.app/",
-      alt: "Affiliate Marketing and earning Website",
+      name: "Daud — Behind the Scenes",
+      description: "6-episode series on the making of the short film Daud (2024): 500K+ Instagram views and 2,500 new followers in 3 days.",
+      image: "images/projects/daud.jpg",
+      tags: ["editing", "storytelling", "motion"],
+      liveview: "https://www.instagram.com/arpitjainn__/",
+      alt: "Daud behind the scenes series",
     },
     {
       id: 4,
-      name: "Randomizer",
-      description: "Fitness Institute",
-      image: "images/projects/randomizer.jpg",
-      tags: ["html", "css", "javascript", "react", "game"],
-      liveview: "https://randomizerr.vercel.app/",
-      alt: "Fitness Institute",
-    },
-    {
-      id: 5,
-      name: "Crypto Tracker",
-      description: "A cryptocurrency tracking dashboard",
-      image: "images/projects/cryptotracker.png",
-      tags: ["react", "javascript", "api"],
-      liveview: "https://cryptotrackerr.vercel.app/",
-      alt: "Crypto Tracker Dashboard",
-    },
-    {
-      id: 6,
-      name: "Weather App",
-      description: "Real-time weather application",
-      image: "images/projects/weatherapp.png",
-      tags: ["javascript", "html", "css", "api"],
-      liveview: "https://weatherappp.vercel.app/",
-      alt: "Real-time Weather Application",
+      name: "Freelance",
+      description: "2021 – Jan 2025. Independent editing, colour and sound for creators and brands — including the Daud series.",
+      image: "media/projects/freelance/fl-01.jpg",
+      tags: ["editing", "storytelling", "motion"],
+      liveview: "https://www.instagram.com/mayankpaliwaal",
+      alt: "Freelance video editing",
     },
   ];
   
@@ -126,7 +107,7 @@ const oM = [
       if (e.liveview) {
         t = `
           <div id="work-item-orange-button-${e.id}" class="work-item-orange-button small-button center orange-hover" style="width: 100%; margin: 0;">
-              Live View
+              Watch
           </div>`;
       } else {
         t = `
