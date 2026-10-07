@@ -12,7 +12,7 @@
   const rs = (id, episode, title) => ({ id, client: "raj-shamani", episode, title, role: "Editor", link: "https://youtu.be/" + id });
   const daud = (n, title) => {
     const id = "ep" + String(n).padStart(2, "0");
-    return { id, client: "daud", episode: "EP " + String(n).padStart(2, "0"), title, role: "Actor and Video Editor", video: "media/projects/daud/" + id + ".mp4", link: "https://www.instagram.com/arpitjainn__/" };
+    return { id, client: "daud", episode: "EP " + String(n).padStart(2, "0"), title, role: "Actor & Video Editor", video: "media/projects/daud/" + id + ".mp4", link: "https://www.instagram.com/arpitjainn__/" };
   };
 
   const PROJECTS = [
