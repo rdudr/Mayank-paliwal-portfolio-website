@@ -1,0 +1,291 @@
+/* ── Motion-graphics loading screen (loader.js) ──────────────────────────
+   Camera viewfinder + clapperboard + "MAYANK PALIWAL" reveal + an edit
+   timeline that fills with the real loading progress. */
+
+#intro-svg {
+    display: none
+}
+
+#mp-loader {
+    --navy: #091434;
+    --orange: #ff923e;
+    --cream: #f5efe6;
+    --slate: #7c8594;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--cream);
+    color: var(--navy);
+    font-family: Poppins, system-ui, sans-serif;
+    overflow: hidden;
+    clip-path: inset(0 0 0 0);
+    transition: clip-path .75s cubic-bezier(.77, 0, .18, 1) .25s
+}
+
+#mp-loader.is-out {
+    clip-path: inset(0 0 100% 0)
+}
+
+/* faint film grain lines */
+#mp-loader::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(9, 20, 52, .025) 0 1px, transparent 1px 4px);
+    pointer-events: none
+}
+
+/* viewfinder corners */
+.mpl-corner {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    border: 2px solid var(--navy);
+    opacity: .7
+}
+
+.mpl-tl { top: 28px; left: 28px; border-right: 0; border-bottom: 0 }
+.mpl-tr { top: 28px; right: 28px; border-left: 0; border-bottom: 0 }
+.mpl-bl { bottom: 28px; left: 28px; border-right: 0; border-top: 0 }
+.mpl-br { bottom: 28px; right: 28px; border-left: 0; border-top: 0 }
+
+.mpl-hud {
+    position: absolute;
+    top: 38px;
+    font: 600 12px/1 "JetBrains Mono", Consolas, monospace;
+    letter-spacing: .14em;
+    color: var(--navy)
+}
+
+.mpl-rec {
+    left: 84px;
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+.mpl-rec i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #e5383b;
+    animation: mpl-blink 1s steps(2, start) infinite
+}
+
+.mpl-fmt {
+    right: 84px;
+    color: var(--slate)
+}
+
+.mpl-sound {
+    position: absolute;
+    bottom: 38px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(9, 20, 52, .15);
+    background: rgba(255, 255, 255, .6);
+    font: 500 12px/1 Poppins, sans-serif;
+    color: var(--slate);
+    cursor: pointer;
+    transition: opacity .4s
+}
+
+.mpl-sound.is-on {
+    opacity: 0;
+    pointer-events: none
+}
+
+/* centre stack */
+.mpl-stack {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min(560px, 86vw)
+}
+
+.mpl-clap {
+    width: 86px;
+    height: 86px;
+    margin-bottom: 26px
+}
+
+.mpl-clap .arm {
+    transform-origin: 7px 16px;
+    transform: rotate(-24deg);
+    animation: mpl-clap-idle 1.6s cubic-bezier(.6, 0, .3, 1) infinite
+}
+
+#mp-loader.is-done .mpl-clap .arm {
+    animation: none;
+    transform: rotate(0deg);
+    transition: transform .14s cubic-bezier(.6, 0, 1, 1)
+}
+
+.mpl-kicker {
+    font: 600 12px/1 "JetBrains Mono", Consolas, monospace;
+    letter-spacing: .5em;
+    color: var(--orange);
+    margin-bottom: 14px;
+    opacity: 0;
+    animation: mpl-fade .6s ease .2s forwards
+}
+
+.mpl-name {
+    display: flex;
+    font-weight: 600;
+    font-size: clamp(30px, 6.4vw, 62px);
+    line-height: 1.05;
+    letter-spacing: -.01em;
+    overflow: hidden;
+    padding-bottom: 4px
+}
+
+.mpl-name span {
+    display: inline-block;
+    transform: translateY(110%);
+    animation: mpl-rise .7s cubic-bezier(.2, .8, .2, 1) forwards
+}
+
+.mpl-name .gap {
+    width: .32em
+}
+
+.mpl-sub {
+    margin-top: 10px;
+    font: 500 13px/1 Poppins, sans-serif;
+    letter-spacing: .6em;
+    text-indent: .6em;
+    color: var(--slate);
+    opacity: 0;
+    animation: mpl-fade .6s ease 1s forwards
+}
+
+/* edit timeline */
+.mpl-timeline {
+    position: relative;
+    width: 100%;
+    margin-top: 40px;
+    opacity: 0;
+    animation: mpl-fade .5s ease .5s forwards
+}
+
+.mpl-track {
+    position: relative;
+    height: 16px;
+    border-radius: 4px;
+    background: rgba(9, 20, 52, .08);
+    overflow: hidden
+}
+
+.mpl-clip {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    border-radius: 3px;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform .35s cubic-bezier(.2, .8, .2, 1)
+}
+
+.mpl-clip.is-in {
+    transform: scaleX(1)
+}
+
+.mpl-wave {
+    position: relative;
+    height: 12px;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 2px
+}
+
+.mpl-wave b {
+    flex: 1;
+    background: rgba(9, 20, 52, .18);
+    border-radius: 1px;
+    transition: background .3s
+}
+
+.mpl-wave b.is-in {
+    background: #2ec4b6
+}
+
+.mpl-head {
+    position: absolute;
+    top: -8px;
+    bottom: -4px;
+    left: 0;
+    width: 2px;
+    background: var(--orange);
+    transition: left .35s cubic-bezier(.2, .8, .2, 1)
+}
+
+.mpl-head::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -6px;
+    border: 7px solid transparent;
+    border-top: 8px solid var(--orange)
+}
+
+.mpl-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    font: 600 12px/1 "JetBrains Mono", Consolas, monospace;
+    letter-spacing: .08em;
+    color: var(--slate)
+}
+
+.mpl-meta .pct {
+    color: var(--navy)
+}
+
+@keyframes mpl-rise { to { transform: translateY(0) } }
+@keyframes mpl-fade { to { opacity: 1 } }
+@keyframes mpl-blink { to { visibility: hidden } }
+@keyframes mpl-clap-idle {
+    0%, 55% { transform: rotate(-24deg) }
+    70% { transform: rotate(0deg) }
+    100% { transform: rotate(-24deg) }
+}
+
+@media (max-width: 600px) {
+    .mpl-fmt { display: none }
+    .mpl-corner { width: 28px; height: 28px }
+    .mpl-tl, .mpl-tr { top: 18px }
+    .mpl-bl, .mpl-br { bottom: 18px }
+    .mpl-tl, .mpl-bl { left: 18px }
+    .mpl-tr, .mpl-br { right: 18px }
+    .mpl-hud { top: 26px }
+    .mpl-rec { left: 60px }
+    .mpl-sub { letter-spacing: .4em; text-indent: .4em }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #mp-loader *, #mp-loader { animation: none !important; transition: none !important }
+    .mpl-name span { transform: none }
+    .mpl-kicker, .mpl-sub, .mpl-timeline { opacity: 1 }
+}
+
+/* the site styles every <span> (slate, 1rem) — keep the loader's own sizes/colours */
+#mp-loader .mpl-name span,
+#mp-loader .mpl-meta span {
+    font-size: inherit;
+    color: inherit
+}
+
+#mp-loader .mpl-meta .pct {
+    color: var(--navy)
+}

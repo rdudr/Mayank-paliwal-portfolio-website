@@ -36752,6 +36752,8 @@ class eM extends Ai {
     P.to(this.loadingRect, {
       y: 61 - 61 * (this.loaded / this.toLoad),
     });
+    // Feed the motion-graphics loader (loader.js)
+    window.dispatchEvent(new CustomEvent("mp-progress", { detail: this.loaded / this.toLoad }));
   }
   initTextures() {
     this.textures.forEach((t) => {
@@ -39493,7 +39495,7 @@ class vM {
           (this.tones = this.experience.world.landingPage.tones),
           (this.hoverIcon = this.experience.ui.hoverIcon),
           (this.soundButton = this.experience.ui.soundButton),
-          P.delayedCall(1.2, () => {
+          P.delayedCall(window.MPLoader ? window.MPLoader.wait(1.2) : 1.2, () => {
             this.close(),
               this.clicked &&
                 localStorage.getItem("soundActive") != "false" &&
@@ -39588,6 +39590,7 @@ class vM {
       this.playIntro());
   }
   playIntro() {
+    window.MPLoader && window.MPLoader.exit();
     P.delayedCall(
       0.1,
       () => (this.domElements.container.style.backgroundColor = "transparent")
