@@ -73,7 +73,7 @@
       yt: yt,
       ig: ig,
       meta: CLIENTS[p.client],
-      thumb: yt ? "https://i.ytimg.com/vi/" + yt + "/maxresdefault.jpg" : "media/projects/" + p.client + "/" + p.id + ".jpg",
+      thumb: yt ? "https://i.ytimg.com/vi/" + yt + "/maxresdefault.jpg" : "media/projects/" + p.client + "/" + p.id + ".jpg?v=2",
     });
   });
 
