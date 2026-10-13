@@ -56,12 +56,12 @@
     { id: "DJEA7Dlvt3y", client: "beerbiceps", episode: "REEL", title: "Prathamesh Sinha Talks About the Mahabharata", role: "Editor", link: "https://www.instagram.com/reel/DJEA7Dlvt3y/" },
     { id: "DJEAck4PIAk", client: "beerbiceps", episode: "REEL", title: "The Best Feeling Ever", role: "Editor", link: "https://www.instagram.com/reel/DJEAck4PIAk/" },
     { id: "DIb5QDwSw-n", client: "beerbiceps", episode: "REEL", title: "Bhuvi Talks About Lionel Messi", role: "Editor", link: "https://www.instagram.com/reel/DIb5QDwSw-n/" },
-    daud(1, "Sach ka Samna"),
-    daud(2, "Shadyantra"),
-    daud(3, "Duvidha"),
-    daud(4, "Grahon Ka Khel"),
-    daud(5, "Khulasa"),
-    daud(6, "Finally Actress Mil Gayi"),
+    daud(1, "The Missing Cameraman"),
+    daud(2, "The Vanishing Actress"),
+    daud(3, "A Deal Gone Wrong"),
+    daud(4, "Every Man’s Nightmare"),
+    daud(5, "The Last Hope"),
+    daud(6, "The Final Act"),
   ].filter(function (p, i, all) {
     // Same video added twice (e.g. a link pasted with a different ?si= / ?stkn= tracker) shows once.
     const key = (q) => (q.link && (q.link.match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/) || q.link.match(/instagram\.com\/(?:reel|p)\/([\w-]+)/) || [])[1]) || q.video || q.id;
